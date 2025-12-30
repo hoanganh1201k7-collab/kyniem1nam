@@ -1,0 +1,314 @@
+
+ <!DOCTYPE html>
+ <html lang="vi">
+ <head>
+     <meta charset="UTF-8">
+     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+     <title>Cẩm Lê</title>
+     <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Quicksand:wght@400;600&display=swap" rel="stylesheet">
+     <style>
+         :root { --primary: #ff758c; --bg-pink: #ffeef0; }
+         
+         body { 
+             margin: 0; padding: 0;
+             font-family: 'Quicksand', sans-serif; 
+             background-color: var(--bg-pink); 
+             overflow: hidden;
+         }
+ 
+         #heart-container {
+             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+             pointer-events: none; z-index: 999;
+         }
+         .heart {
+             position: absolute; top: -10%; font-size: 20px;
+             color: #ff4d6d; animation: fall linear infinite;
+         }
+         @keyframes fall { to { transform: translateY(110vh) rotate(360deg); } }
+ 
+         .wrapper { height: 100vh; display: flex; justify-content: center; align-items: center; }
+ 
+         #lock-screen { text-align: center; z-index: 10; width: 100%; }
+         .card { 
+             background: rgba(255, 255, 255, 0.5); 
+             padding: 30px; border-radius: 30px; 
+             box-shadow: 0 10px 30px rgba(0,0,0,0.05); 
+             display: inline-block; width: 90%; max-width: 450px;
+         }
+         h1 { font-family: 'Dancing Script', cursive; color: var(--primary); font-size: 2.5rem; margin-bottom: 5px; }
+         
+         .timer { display: flex; justify-content: space-between; margin: 20px 0; }
+         .timer-item { 
+             background: var(--primary); color: white; 
+             flex: 1; margin: 0 5px; padding: 10px 0; 
+             border-radius: 15px; font-weight: bold; font-size: 1.2rem;
+         }
+         .timer-item span { display: block; font-size: 0.7rem; text-transform: uppercase; opacity: 0.8; }
+ 
+         input { padding: 12px; border-radius: 25px; border: 2px solid #eee; width: 70%; text-align: center; outline: none; margin: 15px 0; font-size: 1rem; }
+         button { background: var(--primary); color: white; border: none; padding: 12px 35px; border-radius: 25px; cursor: pointer; font-weight: bold; transition: 0.3s; }
+         
+         @keyframes shake {
+             0%, 100% { transform: translateX(0); }
+             25% { transform: translateX(-10px); }
+             75% { transform: translateX(10px); }
+         }
+         .shake { animation: shake 0.3s ease-in-out; }
+ 
+         #meme-overlay {
+             display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+             background: rgba(0, 0, 0, 0.9); z-index: 1000;
+             flex-direction: column; justify-content: center; align-items: center;
+             color: white; text-align: center;
+         }
+         #meme-overlay img { width: 280px; border-radius: 15px; border: 4px solid white; margin-bottom: 15px; }
+ 
+         #photo-slider {
+             display: none; position: fixed; top: 0; left: 0;
+             width: 100%; height: 100vh; z-index: 100;
+             align-items: center; overflow: hidden;
+             background-color: var(--bg-pink);
+         }
+         .photo-track {
+             display: flex; position: absolute; left: 100%;
+             transition: transform 18s linear;
+         }
+         .photo-item {
+             width: 280px; height: 380px; object-fit: cover;
+             margin-right: 25px; border: 10px solid white;
+             box-shadow: 0 10px 20px rgba(0,0,0,0.1); border-radius: 5px; flex-shrink: 0;
+         }
+ 
+         #letter-screen {
+             display: none; width: 95%; max-width: 600px; z-index: 10;
+             animation: fadeIn 1.5s forwards;
+         }
+         .letter-box {
+             background: white; padding: 40px; border-radius: 10px;
+             box-shadow: 0 5px 20px rgba(0,0,0,0.05); line-height: 1.8;
+             border-left: 8px solid var(--primary); position: relative;
+         }
+ 
+         #end-screen {
+             display: none; text-align: center; z-index: 10;
+             animation: fadeIn 3s forwards;
+         }
+         .end-text { font-family: 'Dancing Script', cursive; font-size: 8rem; color: var(--primary); }
+ 
+         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+@media (max-width: 768px) {
+            .card { 
+                padding: 20px; 
+                width: 95%; 
+                max-width: 400px; 
+            }
+            h1 { font-size: 2rem; }
+            .timer-item { 
+                font-size: 1rem; 
+                padding: 8px 0; 
+                margin: 0 2px; 
+            }
+            input { 
+                width: 80%; 
+                padding: 10px; 
+                font-size: 0.9rem; 
+            }
+            button { 
+                padding: 10px 30px; 
+                font-size: 0.9rem; 
+            }
+            #meme-overlay img { 
+                width: 200px; 
+            }
+            .photo-item { 
+                width: 200px; 
+                height: 300px; 
+                margin-right: 15px; 
+            }
+            .letter-box { 
+                padding: 20px; 
+            }
+            .end-text { 
+                font-size: 2rem; 
+            }
+        }
+        .bg-text {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            
+            font-family: 'Dancing Script', cursive;
+            font-size: 25rem;
+            color: rgba(255, 117, 140, 0.12); 
+            
+            white-space: nowrap;
+            pointer-events: none;
+            z-index: 1;
+            user-select: none;
+        }
+     </style>
+ </head>
+ <body>
+    <div class="bg-text">Cẩm Lê</div>
+     <audio id="bgMusic" loop>
+         <source src="Nhac-nen.mp3" type="audio/mpeg">
+     </audio>
+ 
+     <div id="heart-container"></div>
+ 
+     <div id="meme-overlay">
+         <img src="con-meo-khoc-meme-40.jpg" alt="Mèo khóc">
+         <h2 id="meme-text">Sai rồi! Khóc luôn rồi kìa! 😭</h2>
+         <p>Hình phạt: Ngắm mèo khóc 7 giây rồi mới được nhập lại!</p>
+     </div>
+ 
+     <div class="wrapper">
+         <div id="lock-screen">
+             <div class="card">
+                 <h1>Hành trình yêu</h1>
+                 <div class="timer">
+                     <div class="timer-item"><div id="days">00</div><span>Ngày</span></div>
+                     <div class="timer-item"><div id="hours">00</div><span>Giờ</span></div>
+                     <div class="timer-item"><div id="minutes">00</div><span>Phút</span></div>
+                     <div class="timer-item"><div id="seconds">00</div><span>Giây</span></div>
+                 </div>
+                 <p style="color: #666; font-style: italic;">Kỷ niệm</p>
+                 <input type="password" id="passInput" placeholder="Mật mã là đây ta? Cẩm Lê có bíc!😁">
+                 <br>
+                 <button onclick="checkPass()">Mở quà</button>
+             </div>
+         </div>
+ 
+         <div id="photo-slider">
+             <div class="photo-track" id="track">
+                 <img src="att.cky57rDAmtj_kxL0gtArqWVGsh-glW5607ZzyHcJbU0.jpeg" class="photo-item">
+                 <img src="IMG_0958.jpeg" class="photo-item">
+                 <img src="IMG_2414.jpeg" class="photo-item">
+                 <img src="att.lbzF_hC-eTI2bdSKsqSpGZ-FWLBtY3FAm22qg5GlNTg.jpeg" class="photo-item">
+                 <img src="att.pSMw0mpxj6wQkHxQu2aZ2BqCxofoY00kqIYQhCEOitI.jpeg" class="photo-item">
+                 <img src="IMG_0853.jpeg" class="photo-item">
+                 <img src="IMG_0857.png" class="photo-item">
+                 <img src="IMG_1322.jpeg" class="photo-item">
+                 <img src="IMG_2200.png" class="photo-item">
+                 <img src="att.jUAzdSpViTpREDdcDNiS_fXxwfFkyO46JXhV5vbuSB8.jpeg" class="photo-item">
+                 <img src="IMG_2417.jpeg" class="photo-item">
+                 <img src="IMG_6129.jpeg" class="photo-item">
+                 <img src="IMG_8182.jpeg" class="photo-item">
+                 <img src="IMG_0883.jpeg" class="photo-item">
+                 <img src="att.3Mw2j5lSQuZmSJxtRSVb__3m_XZ4ytyxe7u_7h3J-aM.jpeg" class="photo-item">
+             </div>
+         </div>
+ 
+         <div id="letter-screen">
+             <div class="letter-box">
+                 <h1 style="font-size: 2rem;">Gửi iem bíe,</h1>
+                 <div id="typewriter" style="font-size: 1.1rem; color: #444;"></div>
+                 <p style="text-align:right; font-family:'Dancing Script'; font-size: 1.8rem; color: var(--primary); margin-top: 20px;">
+                     Yêu em nhìuuu❤️!
+                 </p>
+             </div>
+         </div>
+ 
+         <div id="end-screen">
+             <div class="end-text">Mãi Iuuu ❤️</div>
+             <p style="color: #ff758c; margin-top: 45px;">Cảm ơn vì đã đến và đã yêu thương anh thật nhiều.</p>
+         </div>
+     </div>
+ 
+     <script>
+         const startDate = new Date(2024, 11, 30); 
+         const letterMessage = `Kỷ niệm 1 năm bên nhau... Đã có rất nhiều những khoảnh khắc đẹp nhưng cũng không ít những chuyện buồn. Anh biết anh không phải người hoàn hảo hay tốt đẹp, vẫn có rất nhiều thiếu sót hay vô tâm nhưng anh vẫn luôn cố gắng luôn thay đổi để xứng đáng với em hơn. Xin lỗi vì nhiều lúc để em cảm thấy tủi thân thấy buồn vì những việc anh đã làm, anh hứa sẽ cố gắng không để em phải buồn nhiều nữa. Cũng cảm ơn em vì đã quan tâm, chăm sóc, luôn lo lắng và suy nghĩ tới anh. Anh thật sự rất may mắn khi có em, em là một người siu quan trọng với anh. Mong rằng chúng mình mãi bên nhau như này nhé.🥹`;
+ 
+         setInterval(createHeart, 350);
+ 
+         function createHeart() {
+             const container = document.getElementById('heart-container');
+             const heart = document.createElement('div');
+             heart.classList.add('heart');
+             const icons = ['❤️', '💗'];
+             heart.innerHTML = icons[Math.floor(Math.random() * icons.length)];
+             heart.style.left = Math.random() * 100 + 'vw';
+             heart.style.animationDuration = Math.random() * 3 + 2 + 's';
+             container.appendChild(heart);
+             setTimeout(() => heart.remove(), 5000);
+         }
+ 
+         function updateTimer() {
+             const now = new Date();
+             const diff = now - startDate;
+             const absDiff = Math.abs(diff);
+ 
+             document.getElementById('days').innerText = Math.floor(absDiff / (1000 * 60 * 60 * 24));
+             document.getElementById('hours').innerText = Math.floor((absDiff / (1000 * 60 * 60)) % 24);
+             document.getElementById('minutes').innerText = Math.floor((absDiff / (1000 * 60)) % 60);
+             document.getElementById('seconds').innerText = Math.floor((absDiff / 1000) % 60);
+         }
+         setInterval(updateTimer, 1000);
+         updateTimer();
+ 
+         function checkPass() {
+             const pass = document.getElementById('passInput').value;
+             const card = document.querySelector('.card');
+             const memeOverlay = document.getElementById('meme-overlay');
+             const memeText = document.getElementById('meme-text');
+             const music = document.getElementById('bgMusic');
+ 
+             const cryMessages = [
+                 "Sai rồi! Khóc luôn rồi kìa! 😭",
+                 "Không biết thật à? Đồ tồi! 😤",
+                 "Nhập lại ngay không mèo dỗi! 😡",
+                 "Đã bảo là sai rồi mà lị...mèo méo meo 😿"
+             ];
+             if(pass === "03123012") { 
+                 music.play().catch(e => console.log("Cần tương tác người dùng"));
+                 document.getElementById('lock-screen').style.display = 'none';
+                 runPhotoSlider();
+             } else {
+                 card.classList.add('shake');
+                 setTimeout(() => card.classList.remove('shake'), 400);
+                  const randomIndex = Math.floor(Math.random() * cryMessages.length);
+                 memeText.innerHTML = cryMessages[randomIndex]
+                 memeOverlay.style.display = 'flex';
+                 setTimeout(() => {
+                     memeOverlay.style.display = 'none';
+                     document.getElementById('passInput').value = "";
+                 }, 5000);
+             }
+         }
+ 
+         function runPhotoSlider() {
+             const slider = document.getElementById('photo-slider');
+             const track = document.getElementById('track');
+             slider.style.display = 'flex';
+             const trackWidth = track.offsetWidth;
+             const screenWidth = window.innerWidth;
+             setTimeout(() => {
+                 track.style.transform = `translateX(-${trackWidth + screenWidth}px)`;
+             }, 100);
+             setTimeout(() => {
+                 slider.style.display = 'none';
+                 showLetter();
+             }, 18500); 
+         }
+ 
+         function showLetter() {
+             document.getElementById('letter-screen').style.display = 'block';
+             let i = 0;
+             function type() {
+                 if (i < letterMessage.length) {
+                     document.getElementById("typewriter").innerHTML += letterMessage.charAt(i);
+                     i++;
+                     setTimeout(type, 50);
+                 } else {
+                     setTimeout(() => {
+                         document.getElementById('letter-screen').style.display = 'none';
+                         document.getElementById('end-screen').style.display = 'block';
+                     }, 10000); 
+                 }
+             }
+             type();
+         }
+     </script>
+ </body>
+ </html>
