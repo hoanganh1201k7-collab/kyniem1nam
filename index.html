@@ -151,9 +151,12 @@
  </head>
  <body>
     <div class="bg-text">Cẩm Lê</div>
-     <audio id="bgMusic" loop>
-         <source src="Nhac-nen.mp3" type="audio/mpeg">
-     </audio>
+    <audio id="bgMusic" loop>
+        <source src="Nhac-nen.mp3" type="audio/mpeg">
+    </audio>
+    <audio id="wrong1"><source src="sai1.mp3" type="audio/mpeg"></audio>
+    <audio id="wrong2"><source src="sai2.mp3" type="audio/mpeg"></audio>
+    <audio id="wrong3"><source src="sai3.mp3" type="audio/mpeg"></audio>
  
      <div id="heart-container"></div>
  
@@ -192,7 +195,7 @@
                  <img src="IMG_1322.jpeg" class="photo-item">
                  <img src="IMG_2200.png" class="photo-item">
                  <img src="att.jUAzdSpViTpREDdcDNiS_fXxwfFkyO46JXhV5vbuSB8.jpeg" class="photo-item">
-                 <img src="IMG_2417.jpeg" class="photo-item">
+                 <img src="IMG_1273.PNG" class="photo-item">
                  <img src="IMG_6129.jpeg" class="photo-item">
                  <img src="IMG_8182.jpeg" class="photo-item">
                  <img src="IMG_0883.jpeg" class="photo-item">
@@ -246,36 +249,42 @@
          }
          setInterval(updateTimer, 1000);
          updateTimer();
- 
-         function checkPass() {
-             const pass = document.getElementById('passInput').value;
-             const card = document.querySelector('.card');
-             const memeOverlay = document.getElementById('meme-overlay');
-             const memeText = document.getElementById('meme-text');
-             const music = document.getElementById('bgMusic');
- 
-             const cryMessages = [
-                 "Sai rồi! Khóc luôn rồi kìa! 😭",
-                 "Không biết thật à? Đồ tồi! 😤",
-                 "Nhập lại ngay không mèo dỗi! 😡",
-                 "Đã bảo là sai rồi mà lị...mèo méo meo 😿"
-             ];
-             if(pass === "03123012") { 
-                 music.play().catch(e => console.log("Cần tương tác người dùng"));
-                 document.getElementById('lock-screen').style.display = 'none';
-                 runPhotoSlider();
-             } else {
-                 card.classList.add('shake');
-                 setTimeout(() => card.classList.remove('shake'), 400);
-                  const randomIndex = Math.floor(Math.random() * cryMessages.length);
-                 memeText.innerHTML = cryMessages[randomIndex]
-                 memeOverlay.style.display = 'flex';
-                 setTimeout(() => {
-                     memeOverlay.style.display = 'none';
-                     document.getElementById('passInput').value = "";
-                 }, 5000);
-             }
-         }
+let wrongCount = 0; 
+
+function checkPass() {
+    const pass = document.getElementById('passInput').value;
+    const card = document.querySelector('.card');
+    const memeOverlay = document.getElementById('meme-overlay');
+    const memeText = document.getElementById('meme-text');
+    const music = document.getElementById('bgMusic');
+    const soundIds = ['wrong1', 'wrong2', 'wrong3'];
+
+    if(pass === "caMlLe0312@3012") { 
+        music.play().catch(e => console.log("Cần tương tác"));
+        document.getElementById('lock-screen').style.display = 'none';
+        runPhotoSlider();
+    } else {
+        const currentSoundId = soundIds[wrongCount % soundIds.length];
+        const errorSound = document.getElementById(currentSoundId);
+        
+        if (errorSound) {
+            errorSound.currentTime = 0;
+            errorSound.play();
+        }
+
+        wrongCount++; 
+        card.classList.add('shake');
+        setTimeout(() => card.classList.remove('shake'), 400);
+        const cryMessages = ["Sai rồi!", "Lại sai nữa!", "Bấm cho kỹ vào!", "Nghỉ chơi luôn giờ!"];
+        memeText.innerHTML = cryMessages[Math.floor(Math.random() * cryMessages.length)];
+        memeOverlay.style.display = 'flex';
+        
+        setTimeout(() => {
+            memeOverlay.style.display = 'none';
+            document.getElementById('passInput').value = "";
+        }, 5000);
+    }
+}
  
          function runPhotoSlider() {
              const slider = document.getElementById('photo-slider');
