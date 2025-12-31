@@ -1,10 +1,10 @@
-
  <!DOCTYPE html>
  <html lang="vi">
  <head>
      <meta charset="UTF-8">
      <meta name="viewport" content="width=device-width, initial-scale=1.0">
      <title>Cẩm Lê</title>
+     <link rel="icon" type="image/png" href="ChatGPT Image 14_27_48 31 thg 12, 2025.png">
      <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Quicksand:wght@400;600&display=swap" rel="stylesheet">
      <style>
          :root { --primary: #ff758c; --bg-pink: #ffeef0; }
@@ -147,6 +147,20 @@
             z-index: 1;
             user-select: none;
         }
+        .logo-container {
+            width: 121px;
+            height: 121px;
+            margin: 0 auto 15px;
+            border-radius: 50%;
+            overflow: hidden;
+            border: 3px solid var(--primary);
+            box-shadow: 0 4px 10px rgba(255, 117, 140, 0.3);
+        }
+        .logo-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
      </style>
  </head>
  <body>
@@ -169,6 +183,9 @@
      <div class="wrapper">
          <div id="lock-screen">
              <div class="card">
+                <div class="logo-container">
+                    <img src="ChatGPT Image 14_27_48 31 thg 12, 2025.png" alt="Logo"> 
+                </div>
                  <h1>Hành trình yêu</h1>
                  <div class="timer">
                      <div class="timer-item"><div id="days">00</div><span>Ngày</span></div>
@@ -259,7 +276,7 @@ function checkPass() {
     const music = document.getElementById('bgMusic');
     const soundIds = ['wrong1', 'wrong2', 'wrong3'];
 
-    if(pass === "vUCaMLe0312") { 
+    if(pass === "caMlLe0312@3012") { 
         music.play().catch(e => console.log("Cần tương tác"));
         document.getElementById('lock-screen').style.display = 'none';
         runPhotoSlider();
